@@ -1,4 +1,4 @@
-SRC += source.c
+SRC += coaxial.c
 
 EXTRAKEY_ENABLE = yes     # Enable Audio and System control keys
 HELIX_ROWS = 5
