@@ -1,4 +1,6 @@
+#include <stdio.h>
 #include QMK_KEYBOARD_H
+#include "keyboards/helix/rev2/keymaps/default/oled_display.c"
 
 enum layer_number {
   _CXL = 0,
