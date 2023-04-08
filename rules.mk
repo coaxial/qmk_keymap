@@ -1,3 +1,4 @@
+SRC += keyboards/helix/rev2/default/oled_display.c
 SRC += coaxial.c
 
 EXTRAKEY_ENABLE = yes     # Enable Audio and System control keys
