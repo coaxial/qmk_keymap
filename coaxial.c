@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include QMK_KEYBOARD_H
-#include "keyboards/helix/rev2/keymaps/default/oled_display.c"
+#include "coaxial.h"
 
 enum layer_number {
   _CXL = 0,
