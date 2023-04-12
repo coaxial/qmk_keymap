@@ -17,4 +17,4 @@ This is my custom keymaps using the [userspace](https://docs.qmk.fm/#/feature_us
 2. download latest firmware file from the [releases page](https://github.com/coaxial/qmk_keymap/releases)
 3. Flash with `qmk flash <path/to/firmware>` (must be run within `qmk_firmware` repo)
 
-> For split keyboards, both sides must be flashed individually.
+> ⚠️ For split keyboards, both sides must be flashed individually.
