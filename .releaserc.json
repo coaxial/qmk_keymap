@@ -9,7 +9,7 @@
       "@semantic-release/github",
       {
         "assets": ["*.{bin,hex,uf2}"]
-      },
+      }
     ],
     [
       "@semantic-release/git",
