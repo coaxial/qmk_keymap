@@ -1,4 +1,4 @@
-name: Build QMK firmware
+name: Build and release firmware
 on: [push, workflow_dispatch]
 
 jobs:
@@ -42,7 +42,7 @@ jobs:
           *.uf2
         retention-days: 5
 
-  publish:
+  release:
     needs: build
     runs-on: ubuntu-latest
     steps:
