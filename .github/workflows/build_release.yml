@@ -47,13 +47,19 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "lts/*"
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
           name: ${{ github.actor }}
 
       - name: Semantic Release
-        uses: wow-actions/release-github-action@v2
+        run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
