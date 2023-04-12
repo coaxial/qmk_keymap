@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 # ifdef OLED_ENABLE
 enum layer_number {
   _CXL = 0,
