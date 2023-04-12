@@ -14,7 +14,6 @@ jobs:
 # End of json file list
 
     steps:
-
     - name: Disable git safe directory checks
       run : git config --global --add safe.directory '*'
 
@@ -46,10 +45,14 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
           name: ${{ github.actor }}
+
       - name: Semantic Release
         uses: wow-actions/release-github-action@v2
         env:
