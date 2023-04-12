@@ -50,16 +50,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "lts/*"
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
           name: ${{ github.actor }}
 
       - name: Semantic Release
-        run: npx semantic-release
+        uses: wow-actions/release-github-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
