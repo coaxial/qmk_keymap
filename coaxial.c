@@ -10,6 +10,36 @@ enum layer_number {
 };
 
 # ifdef OLED_ENABLE
+// Customize layer names
+static void render_layer_status(void) {
+    char buf[10];
+    oled_write_P(PSTR("Layer: "), false);
+
+    switch (get_highest_layer(layer_state)) {
+    case _CXL:
+        oled_write_P(PSTR("Coaxial"), false);
+        break;
+    case _MEDIA:
+        oled_write_P(PSTR("Symbols"), false);
+        break;
+    case _SYMBOLS:
+        oled_write_P(PSTR("Media"), false);
+        break;
+    case _MOUSE:
+        oled_write_P(PSTR("Mouse"), false);
+        break;
+    case _NUMPAD:
+        oled_write_P(PSTR("Numpad"), false);
+        break;
+    default:
+        oled_write_P(PSTR("Undef-"), false);
+        snprintf(buf, sizeof(buf), "%u", layer_state);
+        oled_write(buf, false);
+    }
+
+    oled_write_P(PSTR("\n"), false);
+}
+
 void render_status(void) {
   // Render to mode icon
     static const char os_logo[][2][3] PROGMEM = {
@@ -39,36 +69,6 @@ void render_status(void) {
     oled_write_P(led_state.caps_lock ? PSTR("CAPS") : PSTR("    "), false);
     oled_write_P(led_state.scroll_lock ? PSTR("SCLK") : PSTR("    "), false);
     oled_advance_page(true);
-    oled_write_P(PSTR("\n"), false);
-}
-
-// Customize layer names
-static void render_layer_status(void) {
-    char buf[10];
-    oled_write_P(PSTR("Layer: "), false);
-
-    switch (get_highest_layer(layer_state)) {
-    case _CXL:
-        oled_write_P(PSTR("Coaxial"), false);
-        break;
-    case _MEDIA:
-        oled_write_P(PSTR("Symbols"), false);
-        break;
-    case _SYMBOLS:
-        oled_write_P(PSTR("Media"), false);
-        break;
-    case _MOUSE:
-        oled_write_P(PSTR("Mouse"), false);
-        break;
-    case _NUMPAD:
-        oled_write_P(PSTR("Numpad"), false);
-        break;
-    default:
-        oled_write_P(PSTR("Undef-"), false);
-        snprintf(buf, sizeof(buf), "%u", layer_state);
-        oled_write(buf, false);
-    }
-
     oled_write_P(PSTR("\n"), false);
 }
 
