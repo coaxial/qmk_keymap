@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/coaxial/qmk_keymap/compare/v1.0.0...v1.1.0) (2023-04-14)
+
+
+### Features
+
+* swap "Mouse layer enable" for RALT ([#21](https://github.com/coaxial/qmk_keymap/issues/21)) ([bea83ad](https://github.com/coaxial/qmk_keymap/commit/bea83ad8effc612c53d3f89f0e25ae3fbbc9f126))
+
 # 1.0.0 (2023-04-12)
 
 
