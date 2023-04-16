@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/coaxial/qmk_keymap/compare/v1.1.0...v1.1.1) (2023-04-16)
+
+
+### Bug Fixes
+
+* wrong layer name displayed for Media and Symbols ([#22](https://github.com/coaxial/qmk_keymap/issues/22)) ([6683533](https://github.com/coaxial/qmk_keymap/commit/6683533e03d321a197fb7ace05c3aa655724e14f))
+
 # [1.1.0](https://github.com/coaxial/qmk_keymap/compare/v1.0.0...v1.1.0) (2023-04-14)
 
 
