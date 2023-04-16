@@ -27,10 +27,10 @@ static void render_layer_status(void) {
         oled_write_P(PSTR("Coaxial"), false);
         break;
     case _MEDIA:
-        oled_write_P(PSTR("Symbols"), false);
+        oled_write_P(PSTR("Media"), false);
         break;
     case _SYMBOLS:
-        oled_write_P(PSTR("Media"), false);
+        oled_write_P(PSTR("Symbols"), false);
         break;
     case _MOUSE:
         oled_write_P(PSTR("Mouse"), false);
