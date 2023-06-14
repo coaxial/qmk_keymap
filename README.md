@@ -19,4 +19,8 @@ This is my custom keymaps using the [userspace](https://docs.qmk.fm/#/feature_us
 3. Flash with `cd <qmk_firmware repo> && qmk flash <path/to/firmware>` (must be
    run within `qmk_firmware` repo)
 
+> `qmk/qmk_firmare` can be quite large and slow to `cd` into. Make a shallow
+> clone with `git clone https://github.com/qmk/qmk_firmware --depth 1` and run
+> `qmk doctor` within the directory to set submodules up.
+
 > ⚠️ For split keyboards, both sides must be flashed individually.
