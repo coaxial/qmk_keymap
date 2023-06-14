@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/coaxial/qmk_keymap/compare/v1.1.1...v1.2.0) (2023-06-14)
+
+
+### Features
+
+* Add F20 key ([#25](https://github.com/coaxial/qmk_keymap/issues/25)) ([d463d74](https://github.com/coaxial/qmk_keymap/commit/d463d7432b9e19ad245c7d800aeb743cc0cb68a8))
+
 ## [1.1.1](https://github.com/coaxial/qmk_keymap/compare/v1.1.0...v1.1.1) (2023-04-16)
 
 
