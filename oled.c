@@ -83,7 +83,7 @@ void render_version(void) {
   char version[16];
   FILE* version_file = fopen("VERSION", "r");
   if (version_file == NULL) {
-    version = "";
+    version = "Unknown version"; // 16 chars including \0
   }
 
   fscanf(version_file, "%s", version);
