@@ -81,7 +81,7 @@ void render_status(void) {
 }
 
 void render_version(void) {
-  oled_write_P(PSTR(printf("%s ", VERSION), false));
+  oled_write_P(PSTR(printf("%s ", VERSION)), false);
 }
 
 bool oled_task_user(void) {
