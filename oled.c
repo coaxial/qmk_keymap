@@ -83,7 +83,7 @@ void render_status(void) {
 void render_version(void) {
   // Will display "v1.2.3 " for version number 1.2.3
   oled_write_P(PSTR("v"), false);
-  oled_write_P(PSTR(&VERSION), false);
+  oled_write_P(PSTR("0.0.0"), false);
   oled_write_P(PSTR(" "), false);
 }
 
