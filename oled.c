@@ -10,41 +10,41 @@ enum layer_number {
 };
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-    if (is_keyboard_master()) {
-        return OLED_ROTATION_0;
-    } else {
-        return OLED_ROTATION_180;
-    }
+  if (is_keyboard_master()) {
+    return OLED_ROTATION_0;
+  } else {
+    return OLED_ROTATION_180;
+  }
 }
 
 // Customize layer names
 static void render_layer_status(void) {
-    char buf[10];
-    oled_write_P(PSTR("Layer: "), false);
+  char buf[10];
+  oled_write_P(PSTR("Layer: "), false);
 
-    switch (get_highest_layer(layer_state)) {
+  switch (get_highest_layer(layer_state)) {
     case _CXL:
-        oled_write_P(PSTR("Coaxial"), false);
-        break;
+      oled_write_P(PSTR("Coaxial"), false);
+      break;
     case _MEDIA:
-        oled_write_P(PSTR("Media"), false);
-        break;
+      oled_write_P(PSTR("Media"), false);
+      break;
     case _SYMBOLS:
-        oled_write_P(PSTR("Symbols"), false);
-        break;
+      oled_write_P(PSTR("Symbols"), false);
+      break;
     case _MOUSE:
-        oled_write_P(PSTR("Mouse"), false);
-        break;
+      oled_write_P(PSTR("Mouse"), false);
+      break;
     case _NUMPAD:
-        oled_write_P(PSTR("Numpad"), false);
-        break;
+      oled_write_P(PSTR("Numpad"), false);
+      break;
     default:
-        oled_write_P(PSTR("Undef-"), false);
-        snprintf(buf, sizeof(buf), "%u", layer_state);
-        oled_write(buf, false);
-    }
+      oled_write_P(PSTR("Undef-"), false);
+      snprintf(buf, sizeof(buf), "%u", layer_state);
+      oled_write(buf, false);
+  }
 
-    oled_write_P(PSTR("\n"), false);
+  oled_write_P(PSTR("\n"), false);
 }
 
 void render_status(void) {
