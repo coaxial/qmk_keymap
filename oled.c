@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "VERSION.c"
 
 # ifdef OLED_ENABLE
 enum layer_number {
@@ -80,13 +81,7 @@ void render_status(void) {
 }
 
 void render_version(void) {
-  char version[16] = "Unknown version"; // 16 chars including \0
-  FILE* version_file = fopen("VERSION", "r");
-
-  if (version_file != NULL) {
-    fscanf(version_file, "%s", version);
-    printf("%s ", version);
-  }
+  printf("%s ", VERSION);
 }
 
 bool oled_task_user(void) {
