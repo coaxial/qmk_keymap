@@ -82,7 +82,7 @@ void render_status(void) {
 
 void render_version(void) {
   // Will display "v1.2.3 " for version number 1.2.3
-  char const PROGMEM version[] = VERSION;
+  char const version[] PROGMEM = VERSION;
   oled_write_P(PSTR("v"), false);
   oled_write_P(PSTR(version), false);
   oled_write_P(PSTR(" "), false);
