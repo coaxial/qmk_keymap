@@ -2,9 +2,11 @@
 name: Comment Artifact URL on PR
 
 on:
-  pull_request:
-    branches:
-      - master
+  workflow_run:
+    types:
+      - "completed"
+    workflows:
+      - "Build firmware"
 
 jobs:
   comment-on-pr:
