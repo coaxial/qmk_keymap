@@ -79,6 +79,17 @@ void render_status(void) {
   oled_write_P(PSTR("\n"), false);
 }
 
+void render_version(void) {
+  char version[16];
+  FILE* version_file = fopen("VERSION", "r");
+  if (version_file == NULL) {
+    version = "";
+  }
+
+  fscanf(version_file, "%s", version);
+  printf("%s ", version);
+}
+
 bool oled_task_user(void) {
 #   if DEBUG_TO_SCREEN
   if (debug_enable) {
@@ -88,6 +99,7 @@ bool oled_task_user(void) {
 
   if (is_keyboard_master()) {
     render_status();
+    render_version();
   } else {
     render_helix_logo();
     render_layer_status();
