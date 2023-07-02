@@ -1,7 +1,6 @@
 name: Comment Artifact URL on PR
 
 on:
-  pull_request:
   workflow_run:
     types:
       - "completed"
