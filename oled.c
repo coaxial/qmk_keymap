@@ -77,6 +77,9 @@ void render_status(void) {
   oled_write_P(led_state.caps_lock ? PSTR("CAPS") : PSTR("    "), false);
   oled_write_P(led_state.scroll_lock ? PSTR("SCLK") : PSTR("    "), false);
   oled_advance_page(true);
+
+  render_version();
+
   oled_write_P(PSTR("\n"), false);
 }
 
@@ -95,8 +98,7 @@ bool oled_task_user(void) {
 #   endif // DEBUG_TO_SCREEN
 
   if (is_keyboard_master()) {
-    // render_status();
-    render_version();
+    render_status();
   } else {
     render_helix_logo();
     render_layer_status();
