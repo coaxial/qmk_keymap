@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "version.h"
 
 # ifdef OLED_ENABLE
 enum layer_number {
@@ -47,6 +48,16 @@ static void render_layer_status(void) {
   oled_write_P(PSTR("\n"), false);
 }
 
+void render_version(void) {
+  // Will display "v1.2.3 (2023-07-03)" for version number 1.2.3 compiled on
+  // 2023-07-03
+  oled_write_P(PSTR("v"), false);
+  oled_write_P(PSTR(CXL_VERSION), false);
+  oled_write_P(PSTR(" ("), false);
+  oled_write_P(PSTR(CXL_BUILD_DATE), false);
+  oled_write_P(PSTR(")"), false);
+}
+
 void render_status(void) {
   // Render to mode icon
   static const char os_logo[][2][3] PROGMEM = {
@@ -76,6 +87,9 @@ void render_status(void) {
   oled_write_P(led_state.caps_lock ? PSTR("CAPS") : PSTR("    "), false);
   oled_write_P(led_state.scroll_lock ? PSTR("SCLK") : PSTR("    "), false);
   oled_advance_page(true);
+
+  render_version();
+
   oled_write_P(PSTR("\n"), false);
 }
 
