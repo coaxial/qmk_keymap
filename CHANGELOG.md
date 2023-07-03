@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/coaxial/qmk_keymap/compare/v1.2.0...v1.3.0) (2023-07-03)
+
+
+### Bug Fixes
+
+* Remove version display ([#32](https://github.com/coaxial/qmk_keymap/issues/32)) ([e1316f2](https://github.com/coaxial/qmk_keymap/commit/e1316f2ded2248957766abf2ca2fcf9b6f8c24c6))
+
+
+### Features
+
+* Show keymap version and date on screen ([#27](https://github.com/coaxial/qmk_keymap/issues/27)) ([a57c164](https://github.com/coaxial/qmk_keymap/commit/a57c1643f80db2f9e4617f2a9954c2c456b855c5))
+
 # [1.2.0](https://github.com/coaxial/qmk_keymap/compare/v1.1.1...v1.2.0) (2023-06-14)
 
 
