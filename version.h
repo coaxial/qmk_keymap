@@ -1,2 +1,0 @@
-#define CXL_VERSION "0.0.0"
-#define CXL_BUILD_DATE "0000-00-00"
