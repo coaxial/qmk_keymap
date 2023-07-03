@@ -11,7 +11,6 @@ jobs:
         # List of keymap json files to build
         file:
           - coaxial.json
-            # End of json file list
 
     steps:
     - name: Disable git safe directory checks
