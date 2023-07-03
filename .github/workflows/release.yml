@@ -24,9 +24,10 @@ jobs:
       - name: Install dependencies
         run: npm i
 
-      - name: Download artifact
-        id: download-artifact
-        uses: dawidd6/action-download-artifact@v2
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ github.actor }}
 
       - name: Semantic Release
         run: npx semantic-release
