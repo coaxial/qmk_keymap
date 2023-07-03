@@ -48,6 +48,13 @@ static void render_layer_status(void) {
   oled_write_P(PSTR("\n"), false);
 }
 
+void render_version(void) {
+  // Will display "v1.2.3 " for version number 1.2.3
+  oled_write_P(PSTR("v"), false);
+  oled_write_P(PSTR(VERSION), false);
+  oled_write_P(PSTR(" "), false);
+}
+
 void render_status(void) {
   // Render to mode icon
   static const char os_logo[][2][3] PROGMEM = {
@@ -81,13 +88,6 @@ void render_status(void) {
   render_version();
 
   oled_write_P(PSTR("\n"), false);
-}
-
-void render_version(void) {
-  // Will display "v1.2.3 " for version number 1.2.3
-  oled_write_P(PSTR("v"), false);
-  oled_write_P(PSTR(VERSION), false);
-  oled_write_P(PSTR(" "), false);
 }
 
 bool oled_task_user(void) {
