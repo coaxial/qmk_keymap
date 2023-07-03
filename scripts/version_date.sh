@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-echo "v$1 from $2"
+echo "v$1 built $2"
 
 cat << EOF >> version.h
 #define CXL_VERSION "$1"

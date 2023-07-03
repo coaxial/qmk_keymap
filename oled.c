@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "VERSION.h"
+#include "version.h"
 
 # ifdef OLED_ENABLE
 enum layer_number {
@@ -52,7 +52,7 @@ void render_version(void) {
   // Will display "v1.2.3 " for version number 1.2.3
   oled_write_P(PSTR("v"), false);
   oled_write_P(PSTR(CXL_VERSION), false);
-  oled_write_P(PSTR(" from "), false);
+  oled_write_P(PSTR(" built "), false);
   oled_write_P(PSTR(CXL_BUILD_DATE), false);
   oled_write_P(PSTR(" "), false);
 }
