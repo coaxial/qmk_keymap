@@ -95,7 +95,7 @@ bool oled_task_user(void) {
 #   endif // DEBUG_TO_SCREEN
 
   if (is_keyboard_master()) {
-    render_status();
+    // render_status();
     render_version();
   } else {
     render_helix_logo();
