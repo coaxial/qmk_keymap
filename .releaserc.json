@@ -6,7 +6,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "echo \"const char VERSION[16] = \"${nextRelease.version}\";\" > VERSION.c"
+        "prepareCmd": "echo \"#define VERSION \"${nextRelease.version}\";\" > VERSION.h"
       }
     ],
     [
