@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "VERSION.c"
+#include "VERSION.h"
 
 # ifdef OLED_ENABLE
 enum layer_number {
