@@ -188,7 +188,7 @@
       "KC_COMM",
       "KC_QUES",
       "KC_NO",
-      "KC_NO",
+      "KC_PGUP",
       "KC_NO",
       "KC_NO",
       "KC_NO",
@@ -202,7 +202,7 @@
       "KC_RSFT",
       "KC_NO",
       "KC_NO",
-      "KC_NO"
+      "KC_PGDN"
     ],
     [
       "KC_NO",
