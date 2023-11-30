@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/coaxial/qmk_keymap/compare/v1.3.0...v1.4.0) (2023-11-30)
+
+
+### Features
+
+* Add page up/down keys ([#34](https://github.com/coaxial/qmk_keymap/issues/34)) ([91b9bbc](https://github.com/coaxial/qmk_keymap/commit/91b9bbc6892eb73adec47d50da53a6ca21deb7d0))
+
 # [1.3.0](https://github.com/coaxial/qmk_keymap/compare/v1.2.0...v1.3.0) (2023-07-03)
 
 
