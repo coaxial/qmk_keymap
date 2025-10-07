@@ -1,9 +1,4 @@
-#include <stdbool.h>
 #include <stdio.h>
-
-// Function prototypes for custom/Helix-specific functions
-bool is_mac_mode(void);
-void render_helix_logo(void);
 
 #ifdef OLED_ENABLE
 enum layer_number {
