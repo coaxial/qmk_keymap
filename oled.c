@@ -58,16 +58,6 @@ void render_status(void) {
                                                    {0x97, 0x98, 0},
                                                    {0xb7, 0xb8, 0},
                                                }};
-  if (is_mac_mode()) {
-    oled_write_P(os_logo[0][0], false);
-    oled_write_P(PSTR("\n"), false);
-    oled_write_P(os_logo[0][1], false);
-  } else {
-    oled_write_P(os_logo[1][0], false);
-    oled_write_P(PSTR("\n"), false);
-    oled_write_P(os_logo[1][1], false);
-  }
-
   oled_write_P(PSTR(" "), false);
   render_layer_status();
 
@@ -90,7 +80,6 @@ bool oled_task_user(void) {
   if (is_keyboard_master()) {
     render_status();
   } else {
-    render_helix_logo();
     render_layer_status();
   }
 
