@@ -9,7 +9,7 @@ This is my custom keymaps using the [userspace](https://docs.qmk.fm/#/feature_us
    `https://raw.githubusercontent.com/coaxial/qmk_keymap/master/coaxial.json`)
 2. Edit keys
 3. Download updated json file and overwrite `coaxial.json` in the repo
-4. Commit using a [semantic-commit message](https://github.com/angular/angular/blob/main/CONTRIBUTING.md#-commit-message-format) via PR
+4. Commit using a [semantic-commit message](https://github.com/angular/angular/blob/main/contributing-docs/commit-message-guidelines.md) via PR
 5. Merge PR
 
 ## Flashing new firmware on keyboard
