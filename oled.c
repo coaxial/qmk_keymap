@@ -49,16 +49,6 @@ static void render_layer_status(void) {
 }
 
 void render_status(void) {
-  // Render to mode icon
-  static const char os_logo[][2][3] PROGMEM = {{
-                                                   {0x95, 0x96, 0},
-                                                   {0xb5, 0xb6, 0},
-                                               },
-                                               {
-                                                   {0x97, 0x98, 0},
-                                                   {0xb7, 0xb8, 0},
-                                               }};
-  oled_write_P(PSTR(" "), false);
   render_layer_status();
 
   // Host Keyboard LED Status
@@ -80,6 +70,7 @@ bool oled_task_user(void) {
   if (is_keyboard_master()) {
     render_status();
   } else {
+    render_logo();
     render_layer_status();
   }
 
