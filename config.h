@@ -1,0 +1,1 @@
+#define MOUSEKEY_ENABLE

@@ -1,6 +1,11 @@
+#include <stdbool.h>
 #include <stdio.h>
 
-# ifdef OLED_ENABLE
+// Function prototypes for custom/Helix-specific functions
+bool is_mac_mode(void);
+void render_helix_logo(void);
+
+#ifdef OLED_ENABLE
 enum layer_number {
   _CXL = 0,
   _MEDIA,
@@ -23,25 +28,25 @@ static void render_layer_status(void) {
   oled_write_P(PSTR("Layer: "), false);
 
   switch (get_highest_layer(layer_state)) {
-    case _CXL:
-      oled_write_P(PSTR("Coaxial"), false);
-      break;
-    case _MEDIA:
-      oled_write_P(PSTR("Media"), false);
-      break;
-    case _SYMBOLS:
-      oled_write_P(PSTR("Symbols"), false);
-      break;
-    case _MOUSE:
-      oled_write_P(PSTR("Mouse"), false);
-      break;
-    case _NUMPAD:
-      oled_write_P(PSTR("Numpad"), false);
-      break;
-    default:
-      oled_write_P(PSTR("Undef-"), false);
-      snprintf(buf, sizeof(buf), "%u", layer_state);
-      oled_write(buf, false);
+  case _CXL:
+    oled_write_P(PSTR("Coaxial"), false);
+    break;
+  case _MEDIA:
+    oled_write_P(PSTR("Media"), false);
+    break;
+  case _SYMBOLS:
+    oled_write_P(PSTR("Symbols"), false);
+    break;
+  case _MOUSE:
+    oled_write_P(PSTR("Mouse"), false);
+    break;
+  case _NUMPAD:
+    oled_write_P(PSTR("Numpad"), false);
+    break;
+  default:
+    oled_write_P(PSTR("Undef-"), false);
+    snprintf(buf, sizeof(buf), "%u", layer_state);
+    oled_write(buf, false);
   }
 
   oled_write_P(PSTR("\n"), false);
@@ -49,14 +54,14 @@ static void render_layer_status(void) {
 
 void render_status(void) {
   // Render to mode icon
-  static const char os_logo[][2][3] PROGMEM = {
-    {
-      {0x95,0x96,0}, {0xb5,0xb6,0},
-    },
-    {
-      {0x97,0x98,0}, {0xb7,0xb8,0},
-    }
-  };
+  static const char os_logo[][2][3] PROGMEM = {{
+                                                   {0x95, 0x96, 0},
+                                                   {0xb5, 0xb6, 0},
+                                               },
+                                               {
+                                                   {0x97, 0x98, 0},
+                                                   {0xb7, 0xb8, 0},
+                                               }};
   if (is_mac_mode()) {
     oled_write_P(os_logo[0][0], false);
     oled_write_P(PSTR("\n"), false);
@@ -80,11 +85,11 @@ void render_status(void) {
 }
 
 bool oled_task_user(void) {
-#   if DEBUG_TO_SCREEN
+#if DEBUG_TO_SCREEN
   if (debug_enable) {
     return;
   }
-#   endif // DEBUG_TO_SCREEN
+#endif // DEBUG_TO_SCREEN
 
   if (is_keyboard_master()) {
     render_status();
