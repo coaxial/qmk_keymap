@@ -21,9 +21,9 @@ This is my custom keymaps using the [userspace](https://docs.qmk.fm/#/feature_us
 1. Setup the [QMK CLI](https://docs.qmk.fm/#/newbs_getting_started?id=set-up-your-environment)
 2. Download latest firmware file from the [releases page](https://github.com/coaxial/qmk_keymap/releases)
 3. Flash with `cd <qmk_firmware repo> && qmk flash <path/to/firmware>` (must be
-   run within `qmk_firmare` repo)
+   run within `qmk_firmware` repo)
 
-> `qmk/qmk_firmare` can be quite large and slow to `cd` into. Make a shallow
+> `qmk/qmk_firmware` can be quite large and slow to `cd` into. Make a shallow
 > clone with `git clone https://github.com/qmk/qmk_firmware --depth 1` and run
 > `qmk doctor` within the directory to set submodules up.
 
