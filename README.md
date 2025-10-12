@@ -12,6 +12,10 @@ This is my custom keymaps using the [userspace](https://docs.qmk.fm/#/feature_us
 4. Commit using a [semantic-commit message](https://github.com/angular/angular/blob/main/contributing-docs/commit-message-guidelines.md) via PR
 5. Merge PR
 
+## Keymap Layout
+
+![Keymap](coaxial.svg)
+
 ## Flashing new firmware on keyboard
 
 1. Setup the [QMK CLI](https://docs.qmk.fm/#/newbs_getting_started?id=set-up-your-environment)
@@ -19,7 +23,7 @@ This is my custom keymaps using the [userspace](https://docs.qmk.fm/#/feature_us
 3. Flash with `cd <qmk_firmware repo> && qmk flash <path/to/firmware>` (must be
    run within `qmk_firmware` repo)
 
-> `qmk/qmk_firmare` can be quite large and slow to `cd` into. Make a shallow
+> `qmk/qmk_firmware` can be quite large and slow to `cd` into. Make a shallow
 > clone with `git clone https://github.com/qmk/qmk_firmware --depth 1` and run
 > `qmk doctor` within the directory to set submodules up.
 

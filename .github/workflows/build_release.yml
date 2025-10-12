@@ -1,37 +1,44 @@
 name: Build and release firmware
-on: [push, workflow_dispatch]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: qmkfm/qmk_cli
     strategy:
       fail-fast: false
       matrix:
-        # List of keymap json files to build
         file:
           - coaxial.json
-            # End of json file list
 
     steps:
-      - name: Disable git safe directory checks
-        run: git config --global --add safe.directory '*'
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git python3 python3-pip gcc-avr avr-libc binutils-avr
+          python3 -m pip install --upgrade pip qmk keymap-drawer
 
-      - name: Checkout QMK
-        uses: actions/checkout@v3
-        with:
-          repository: qmk/qmk_firmware
-          submodules: recursive
+      - name: Setup QMK
+        run: |
+          qmk setup -y
 
       - name: Checkout userspace
         uses: actions/checkout@v3
         with:
-          path: users/${{ github.actor }}
+          path: qmk_firmware/users/${{ github.actor }}
+
+      - name: Generate keymap SVG
+        run: |
+          cd qmk_firmware/users/${{ github.actor }}
+          keymap parse -q coaxial.json | keymap draw - > coaxial.svg
+          cd -
+          mv qmk_firmware/users/${{ github.actor }}/coaxial.svg .
 
       - name: Build firmware
-        run: qmk compile "users/${{ github.actor }}/${{ matrix.file }}"
+        run: |
+          cd qmk_firmware/
+          qmk compile "users/${{ github.actor }}/${{ matrix.file }}"
 
-      - name: Upload firmware
+      - name: Upload firmware and SVG
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.actor }}
@@ -39,7 +46,54 @@ jobs:
             *.hex
             *.bin
             *.uf2
+            coaxial.svg
           retention-days: 5
+
+  commit_svg:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ github.actor }}
+
+      - name: Commit and push updated SVG
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add coaxial.svg
+          git commit -m 'docs: update keymap SVG [skip ci]' || echo "No changes to commit"
+          git push
+
+  pr_comment:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ github.actor }}
+
+      - name: Encode SVG to base64
+        id: encode
+        run: echo "base64=$(base64 -w 0 coaxial.svg)" >> $GITHUB_OUTPUT
+
+      - name: Create or update PR comment with SVG
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ## Keymap Layout Preview
+            <img src="data:image/svg+xml;base64,${{ steps.encode.outputs.base64 }}" alt="Keymap SVG" />
 
   release:
     needs: build
