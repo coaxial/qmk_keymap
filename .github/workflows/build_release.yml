@@ -58,7 +58,7 @@ jobs:
             *.hex
             *.bin
             *.uf2
-            qmk_firmware/users/${{ github.actor }}/coaxial.svg
+            coaxial.svg
           retention-days: 5
 
   commit_svg:
