@@ -11,6 +11,18 @@ jobs:
           - coaxial.json
 
     steps:
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pip
+            /var/cache/apt
+            /var/lib/apt/lists
+            qmk_firmware
+          key: ${{ runner.os }}-deps-${{ hashFiles('**/requirements.txt', '**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-deps-
+
       - name: Install dependencies
         run: |
           sudo apt-get update
@@ -19,7 +31,7 @@ jobs:
 
       - name: Setup QMK
         run: |
-          qmk setup -y
+          if [ ! -d "qmk_firmware" ]; then qmk setup -y; fi
 
       - name: Checkout userspace
         uses: actions/checkout@v3
@@ -65,6 +77,9 @@ jobs:
         with:
           name: ${{ github.actor }}
 
+      - name: Move SVG to root
+        run: mv qmk_firmware/users/${{ github.actor }}/coaxial.svg coaxial.svg
+
       - name: Commit and push updated SVG
         run: |
           git config --global user.name 'github-actions[bot]'
@@ -82,6 +97,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ github.actor }}
+
+      - name: Move SVG to root
+        run: mv qmk_firmware/users/${{ github.actor }}/coaxial.svg coaxial.svg
 
       - name: Encode SVG to base64
         id: encode
