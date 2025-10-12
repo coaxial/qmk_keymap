@@ -95,17 +95,23 @@ jobs:
         with:
           name: ${{ github.actor }}
 
-      - name: Encode SVG to base64
-        id: encode
-        run: echo "base64=$(base64 -w 0 coaxial.svg)" >> $GITHUB_OUTPUT
+      - name: Install ImageMagick
+        run: sudo apt-get update && sudo apt-get install -y imagemagick
 
-      - name: Create or update PR comment with SVG
+      - name: Convert SVG to PNG
+        run: convert coaxial.svg coaxial.png
+
+      - name: Encode PNG to base64
+        id: encode
+        run: echo "base64=$(base64 -w 0 coaxial.png)" >> $GITHUB_OUTPUT
+
+      - name: Create or update PR comment with PNG
         uses: peter-evans/create-or-update-comment@v3
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             ## Keymap Layout Preview
-            ![Keymap SVG](data:image/svg+xml;base64,${{ steps.encode.outputs.base64}})
+            ![Keymap PNG](data:image/png;base64,${{ steps.encode.outputs.base64 }})
 
   release:
     needs: build
