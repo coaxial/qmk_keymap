@@ -95,17 +95,19 @@ jobs:
         with:
           name: ${{ github.actor }}
 
-      - name: Encode SVG to base64
-        id: encode
-        run: echo "base64=$(base64 -w 0 coaxial.svg)" >> $GITHUB_OUTPUT
+      - name: Upload SVG to transfer.sh
+        id: upload
+        run: |
+          url=$(curl -s --upload-file coaxial.svg https://transfer.sh/coaxial.svg)
+          echo "svg_url=$url" >> $GITHUB_OUTPUT
 
-      - name: Create or update PR comment with SVG
+      - name: Create or update PR comment with SVG link
         uses: peter-evans/create-or-update-comment@v3
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             ## Keymap Layout Preview
-            ![Keymap SVG](data:image/svg+xml;base64,${{ steps.encode.outputs.base64 }})
+            ![Keymap SVG](${{ steps.upload.outputs.svg_url }})
 
   release:
     needs: build
