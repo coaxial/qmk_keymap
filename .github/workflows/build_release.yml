@@ -1,5 +1,5 @@
 name: Build and release firmware
-on: [push, workflow_dispatch]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build:
@@ -28,10 +28,20 @@ jobs:
         with:
           path: users/${{ github.actor }}
 
+      - name: Install Python and keymap-drawer
+        run: |
+          apt-get update && apt-get install -y python3 python3-pip
+          pip3 install keymap-drawer
+
+      - name: Generate keymap SVG
+        run: |
+          cd users/${{ github.actor }}
+          keymap parse -q coaxial.json | keymap draw - > coaxial.svg
+
       - name: Build firmware
         run: qmk compile "users/${{ github.actor }}/${{ matrix.file }}"
 
-      - name: Upload firmware
+      - name: Upload firmware and SVG
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.actor }}
@@ -39,7 +49,56 @@ jobs:
             *.hex
             *.bin
             *.uf2
+            users/${{ github.actor }}/coaxial.svg
           retention-days: 5
+
+  commit_svg:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ github.actor }}
+
+      - name: Commit and push updated SVG
+        run: |
+          mv coaxial.svg coaxial.svg  # Overwrite the existing file
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add coaxial.svg
+          git commit -m 'docs: update keymap SVG [skip ci]' || echo "No changes to commit"
+          git push
+
+  pr_comment:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ github.actor }}
+
+      - name: Encode SVG to base64
+        id: encode
+        run: echo "base64=$(base64 -w 0 coaxial.svg)" >> $GITHUB_OUTPUT
+
+      - name: Create or update PR comment with SVG
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ## Keymap Layout Preview
+            ![Keymap SVG](data:image/svg+xml;base64,${{ steps.encode.outputs.base64 }})
+          edit-mode: replace
 
   release:
     needs: build
