@@ -75,7 +75,7 @@ jobs:
 
       - name: Commit and push updated SVG
         run: |
-          mv coaxial.svg coaxial.svg  # Overwrite the existing file
+          mv coaxial.svg coaxial.svg
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add coaxial.svg
@@ -103,7 +103,6 @@ jobs:
           body: |
             ## Keymap Layout Preview
             <img src="data:image/svg+xml;base64,${{ steps.encode.outputs.base64 }}" alt="Keymap SVG" />
-        edit-mode: replace
 
   release:
     needs: build
