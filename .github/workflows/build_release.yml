@@ -4,7 +4,7 @@ on: [push, pull_request, workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: qmkfm/qmk_cli
+    container: ubuntu:22.04
     strategy:
       fail-fast: false
       matrix:
@@ -14,32 +14,24 @@ jobs:
             # End of json file list
 
     steps:
-      - name: Disable git safe directory checks
-        run: git config --global --add safe.directory '*'
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y git python3 python3-pip
+          python3 -m pip install --upgrade pip qmk keymap-drawer
 
-      - name: Checkout QMK
-        uses: actions/checkout@v3
-        with:
-          repository: qmk/qmk_firmware
-          submodules: recursive
+      - name: Setup QMK
+        run: |
+          qmk setup -y
 
       - name: Checkout userspace
         uses: actions/checkout@v3
         with:
-          path: users/${{ github.actor }}
-
-      - name: Install Python and keymap-drawer
-        run: |
-          echo "deb http://deb.debian.org/debian bullseye-backports   main" >> /etc/apt/sources.list
-          apt-get update
-          apt-get install -y python3.10 python3.10-pip                
-          update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1
-          python3 -m pip install --upgrade pip
-          pip3 install keymap-drawer
+          path: qmk_firmware/users/${{ github.actor }}
 
       - name: Generate keymap SVG
         run: |
-          cd users/${{ github.actor }}
+          cd qmk_firmware/users/${{ github.actor }}
           keymap parse -q coaxial.json | keymap draw - > coaxial.svg
 
       - name: Build firmware
@@ -53,7 +45,7 @@ jobs:
             *.hex
             *.bin
             *.uf2
-            users/${{ github.actor }}/coaxial.svg
+            qmk_firmware/users/${{ github.actor }}/coaxial.svg
           retention-days: 5
 
   commit_svg:
