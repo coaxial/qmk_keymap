@@ -12,12 +12,10 @@ jobs:
 
     steps:
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.cache/pip
-            /var/cache/apt
-            /var/lib/apt/lists
             qmk_firmware
           key: ${{ runner.os }}-deps-${{ hashFiles('**/requirements.txt', '**/package.json') }}
           restore-keys: |
@@ -26,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y git python3 python3-pip gcc-avr avr-libc binutils-avr
+          sudo apt-get install -y git python3 python3-pip gcc-avr avr-libc binutils-avr jq
           python3 -m pip install --upgrade pip qmk keymap-drawer
 
       - name: Setup QMK
@@ -77,9 +75,6 @@ jobs:
         with:
           name: ${{ github.actor }}
 
-      - name: Move SVG to root
-        run: mv qmk_firmware/users/${{ github.actor }}/coaxial.svg coaxial.svg
-
       - name: Commit and push updated SVG
         run: |
           git config --global user.name 'github-actions[bot]'
@@ -93,25 +88,53 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip keymap-drawer lxml
+
+      - name: Checkout base branch
+        uses: actions/checkout@v3
         with:
-          name: ${{ github.actor }}
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base
 
-      - name: Move SVG to root
-        run: mv qmk_firmware/users/${{ github.actor }}/coaxial.svg coaxial.svg
+      - name: Checkout head branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: head
 
-      - name: Encode SVG to base64
-        id: encode
-        run: echo "base64=$(base64 -w 0 coaxial.svg)" >> $GITHUB_OUTPUT
+      - name: Generate diff SVG
+        run: |
+          cd head
+          python3 scripts/generate_diff_svg.py ../base/coaxial.json coaxial.json ../diff.svg
+          ls -la ../diff.svg  # Verify file exists and has content
+          head -20 ../diff.svg  # Check SVG content for highlights
 
-      - name: Create or update PR comment with SVG
+      - name: Upload diff SVG to catbox.moe
+        id: upload
+        run: |
+          if [ -f diff.svg ]; then
+            url=$(curl -s -F reqtype=fileupload -F fileToUpload=@diff.svg https://catbox.moe/user/api.php)
+            echo "Upload response: $url"  # Log upload result
+            if [[ $url == https://* ]]; then
+              echo "diff_svg_url=$url" >> $GITHUB_OUTPUT
+            else
+              echo "Upload failed: $url"
+              exit 1
+            fi
+          else
+            echo "diff.svg not found"
+            exit 1
+          fi
+
+      - name: Create or update PR comment with diff SVG
         uses: peter-evans/create-or-update-comment@v3
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            ## Keymap Layout Preview
-            <img src="data:image/svg+xml;base64,${{ steps.encode.outputs.base64 }}" alt="Keymap SVG" />
+            ## Keymap Layout Diff Preview
+            ![Keymap Diff SVG](${{ steps.upload.outputs.diff_svg_url }})
 
   release:
     needs: build
