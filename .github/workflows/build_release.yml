@@ -5,6 +5,13 @@ on:
   workflow_dispatch:
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - name: Test run
+        run: echo "Workflow is working"
+
   build:
     runs-on: ubuntu-latest
     strategy:
