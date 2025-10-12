@@ -95,10 +95,10 @@ jobs:
         with:
           name: ${{ github.actor }}
 
-      - name: Upload SVG to file.io
+      - name: Upload SVG to catbox.moe
         id: upload
         run: |
-          url=$(curl -s -F file=@coaxial.svg https://file.io | jq -r '.link')
+          url=$(curl -s -F reqtype=fileupload -F fileToUpload=@coaxial.svg https://catbox.moe/user/api.php)
           echo "svg_url=$url" >> $GITHUB_OUTPUT
 
       - name: Create or update PR comment with SVG link
