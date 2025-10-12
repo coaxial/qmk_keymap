@@ -77,9 +77,6 @@ jobs:
         with:
           name: ${{ github.actor }}
 
-      - name: Move SVG to root
-        run: mv qmk_firmware/users/${{ github.actor }}/coaxial.svg coaxial.svg
-
       - name: Commit and push updated SVG
         run: |
           git config --global user.name 'github-actions[bot]'
@@ -97,9 +94,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ github.actor }}
-
-      - name: Move SVG to root
-        run: mv qmk_firmware/users/${{ github.actor }}/coaxial.svg coaxial.svg
 
       - name: Encode SVG to base64
         id: encode
