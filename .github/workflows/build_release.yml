@@ -30,6 +30,8 @@ jobs:
         run: |
           cd qmk_firmware/users/${{ github.actor }}
           keymap parse -q coaxial.json | keymap draw - > coaxial.svg
+          cd -
+          mv qmk_firmware/users/${{ github.actor }}/coaxial.svg .
 
       - name: Build firmware
         run: |
@@ -44,7 +46,7 @@ jobs:
             *.hex
             *.bin
             *.uf2
-            qmk_firmware/users/${{ github.actor }}/coaxial.svg
+            coaxial.svg
           retention-days: 5
 
   commit_svg:
@@ -65,7 +67,6 @@ jobs:
 
       - name: Commit and push updated SVG
         run: |
-          mv coaxial.svg coaxial.svg
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add coaxial.svg
