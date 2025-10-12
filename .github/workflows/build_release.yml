@@ -64,7 +64,8 @@ jobs:
   commit_svg:
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    # if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    if: (github.ref == 'refs/heads/master' && github.event_name == 'push') || (github.ref == 'refs/heads/test-svg-commit' && github.event_name == 'push') || github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -88,8 +89,7 @@ jobs:
   pr_comment:
     needs: build
     runs-on: ubuntu-latest
-    # if: github.event_name == 'pull_request'
-    if: (github.ref == 'refs/heads/master' && github.event_name == 'push') || (github.ref == 'refs/heads/test-svg-commit' && github.event_name == 'push') || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'pull_request'
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
