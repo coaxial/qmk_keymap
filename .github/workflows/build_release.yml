@@ -95,10 +95,10 @@ jobs:
         with:
           name: ${{ github.actor }}
 
-      - name: Upload SVG to transfer.sh
+      - name: Upload SVG to 0x0.st
         id: upload
         run: |
-          url=$(curl -s --upload-file coaxial.svg https://transfer.sh/coaxial.svg)
+          url=$(curl -s -F file=@coaxial.svg https://0x0.st/)
           echo "svg_url=$url" >> $GITHUB_OUTPUT
 
       - name: Create or update PR comment with SVG link
