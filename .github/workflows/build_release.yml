@@ -35,7 +35,9 @@ jobs:
           keymap parse -q coaxial.json | keymap draw - > coaxial.svg
 
       - name: Build firmware
-        run: qmk compile "users/${{ github.actor }}/${{ matrix.file }}"
+        run: |
+          cd qmk_firmware/
+          qmk compile "users/${{ github.actor }}/${{ matrix.file }}"
 
       - name: Upload firmware and SVG
         uses: actions/upload-artifact@v4
