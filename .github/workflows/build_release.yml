@@ -95,8 +95,8 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             ## Keymap Layout Preview
-            ![Keymap SVG](data:image/svg+xml;base64,${{ steps.encode.outputs.base64 }})
-          edit-mode: replace
+            <img src="data:image/svg+xml;base64,${{ steps.encode.outputs.base64 }}" alt="Keymap SVG" />
+        edit-mode: replace
 
   release:
     needs: build
