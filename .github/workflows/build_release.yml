@@ -46,6 +46,7 @@ jobs:
       - name: Build firmware
         run: |
           cd qmk_firmware/
+          qmk --version
           qmk compile "users/${{ github.actor }}/${{ matrix.file }}"
 
       - name: Upload firmware and SVG
@@ -88,53 +89,29 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
-      - name: Install dependencies
-        run: |
-          python3 -m pip install --upgrade pip keymap-drawer lxml
-
-      - name: Checkout base branch
-        uses: actions/checkout@v3
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
         with:
-          ref: ${{ github.event.pull_request.base.sha }}
-          path: base
+          name: ${{ github.actor }}
 
-      - name: Checkout head branch
-        uses: actions/checkout@v3
+      - name: Upload SVG
+        id: upload-svg
+        uses: McCzarny/upload-image@v2
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          path: head
+          path: coaxial.svg
+          upload-method: cloudinary
+          api-key: ${{ secrets.CLOUDINARY_API_KEY }}
+          api-secret: ${{ secrets.CLOUDINARY_API_SECRET }}
+          cloud-name: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
 
-      - name: Generate diff SVG
-        run: |
-          cd head
-          python3 scripts/generate_diff_svg.py ../base/coaxial.json coaxial.json ../diff.svg
-          ls -la ../diff.svg  # Verify file exists and has content
-          head -20 ../diff.svg  # Check SVG content for highlights
-
-      - name: Upload diff SVG to catbox.moe
-        id: upload
-        run: |
-          if [ -f diff.svg ]; then
-            url=$(curl -s -F reqtype=fileupload -F fileToUpload=@diff.svg https://catbox.moe/user/api.php)
-            echo "Upload response: $url"  # Log upload result
-            if [[ $url == https://* ]]; then
-              echo "diff_svg_url=$url" >> $GITHUB_OUTPUT
-            else
-              echo "Upload failed: $url"
-              exit 1
-            fi
-          else
-            echo "diff.svg not found"
-            exit 1
-          fi
-
-      - name: Create or update PR comment with diff SVG
+      - name: Create or update PR comment with SVG
         uses: peter-evans/create-or-update-comment@v3
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            ## Keymap Layout Diff Preview
-            ![Keymap Diff SVG](${{ steps.upload.outputs.diff_svg_url }})
+            ## New keymap layout preview
+
+            ![Keymap SVG](${{ steps.upload-svg.outputs.url }})
 
   release:
     needs: build
