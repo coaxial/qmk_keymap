@@ -48,7 +48,7 @@ jobs:
       - name: Generate keymap SVG
         run: |
           cd qmk_firmware/users/${{ github.actor }}
-          keymap parse -q coaxial.json | keymap draw - > coaxial.svg
+          keymap -c drawer_config.yaml parse -q coaxial.json | keymap -c drawer_config.yaml draw - > coaxial.svg
           cd -
           mv qmk_firmware/users/${{ github.actor }}/coaxial.svg .
 
