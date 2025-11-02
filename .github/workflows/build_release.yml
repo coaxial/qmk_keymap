@@ -132,11 +132,19 @@ jobs:
           api-secret: ${{ secrets.CLOUDINARY_API_SECRET }}
           cloud-name: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
 
+      - name: Find Comment
+        uses: peter-evans/find-comment@v3
+        id: fc
+        with:
+          issue-number: ${{ github.event.number }}
+          body-includes: "New keymap layout preview"
+
       - name: Create or update PR comment with SVG
         uses: peter-evans/create-or-update-comment@v3
         with:
-          edit-mode: replace
           issue-number: ${{ github.event.pull_request.number }}
+          edit-mode: replace
+          comment-id: ${{ steps.fc.outputs.comment-id }}
           body: |
             ## New keymap layout preview
 
