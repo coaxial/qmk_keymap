@@ -38,17 +38,23 @@ jobs:
         with:
           path: qmk_firmware/users/${{ github.actor }}
 
+      # qmk installs the apt packages it needs so we key the cache on the
+      # qmk commit sha
       - name: Cache apt packages
         uses: actions/cache@v4
         with:
-          path: /var/cache/apt/archives
-          key: ${{ runner.os }}-deps-${{ hashFiles('.github/workflows/build_release.yml') }}
+          path: .apt/**/*.deb
+          key: ${{ runner.os }}-apt-${{ steps.qmk-sha.outputs.sha }}
           restore-keys: ${{ runner.os }}-apt-
 
-      - name: Install dependencies
+      # This avoids updating the man db every time which is slow and
+      # unnecessary, and it sets the cache to ~/.apt to avoid
+      # permission issues
+      - name: Configure apt
         run: |
           sudo rm /var/lib/man-db/auto-update
-          sudo apt-get install -y git gcc-avr avr-libc binutils-avr jq
+          mkdir .apt
+          echo "Dir::Cache \"${PWD}/.apt\";" | sudo tee /etc/apt/apt.conf.d/99cache
 
       - name: Setup python
         uses: actions/setup-python@v6
