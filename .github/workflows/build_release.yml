@@ -85,14 +85,14 @@ jobs:
   commit_svg:
     needs: build
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
       - name: Checkout repo
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-          ref: ${{ github.base_ref }}
+          ref: ${{ github.ref }}
 
       - name: Download artifacts
         uses: actions/download-artifact@v4
