@@ -1,65 +1,171 @@
 name: Build and release firmware
-on: [push, workflow_dispatch]
+on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: qmkfm/qmk_cli
     strategy:
       fail-fast: false
       matrix:
-        # List of keymap json files to build
         file:
           - coaxial.json
-            # End of json file list
+    env:
+      QMK_HOME: /home/runner/work/qmk_keymap/qmk_keymap/qmk_firmware
 
     steps:
-    - name: Disable git safe directory checks
-      run : git config --global --add safe.directory '*'
+      - name: Get QMK latest commit SHA
+        id: qmk-sha
+        run: echo "sha=$(curl -s https://api.github.com/repos/qmk/qmk_firmware/commits/master | jq -r .sha)" >> $GITHUB_OUTPUT
 
-    - name: Checkout QMK
-      uses: actions/checkout@v3
-      with:
-        repository: qmk/qmk_firmware
-        submodules: recursive
+      - name: Cache QMK firmware
+        uses: actions/cache@v4
+        with:
+          path: qmk_firmware
+          key: ${{ runner.os }}-qmk-${{ steps.qmk-sha.outputs.sha }}
+          restore-keys: ${{ runner.os }}-qmk-
 
-    - name: Checkout userspace
-      uses: actions/checkout@v3
-      with:
-        path: users/${{ github.actor }}
+      - name: Get QMK firmware
+        uses: actions/checkout@v5
+        with:
+          repository: qmk/qmk_firmware
+          path: qmk_firmware
+          ref: master
+          fetch-depth: 1
+          submodules: recursive
 
-    - name: Build firmware
-      run: qmk compile "users/${{ github.actor }}/${{ matrix.file }}"
+      - name: Checkout userspace
+        uses: actions/checkout@v5
+        with:
+          path: qmk_firmware/users/${{ github.actor }}
 
-    - name: Upload firmware
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ github.actor }}
-        path: |
-          *.hex
-          *.bin
-          *.uf2
-        retention-days: 5
+      # This avoids updating the man db every time which is slow and
+      # unnecessary
+      - name: Configure apt
+        run: |
+          sudo rm /var/lib/man-db/auto-update
+
+      - name: Setup python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.x"
+          cache: "pip"
+          cache-dependency-path: qmk_firmware/users/${{ github.actor }}/requirements.txt
+
+      - name: Install Python dependencies
+        run: pip install -r qmk_firmware/users/${{ github.actor }}/requirements.txt
+
+      - name: Setup QMK
+        run: |
+          qmk setup -y
+
+      - name: Generate keymap SVG
+        run: |
+          cd qmk_firmware/users/${{ github.actor }}
+          keymap -c drawer_config.yaml parse -q coaxial.json | keymap -c drawer_config.yaml draw - > coaxial.svg
+          cd -
+          mv qmk_firmware/users/${{ github.actor }}/coaxial.svg .
+
+      - name: Build firmware
+        run: |
+          cd qmk_firmware/
+          qmk --version
+          qmk compile "users/${{ github.actor }}/${{ matrix.file }}"
+
+      - name: Upload firmware and SVG
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.actor }}
+          path: |
+            *.hex
+            *.bin
+            *.uf2
+            coaxial.svg
+          retention-days: 5
+
+  commit_svg:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.base_ref }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ github.actor }}
+
+      - name: Commit and push updated SVG
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add coaxial.svg
+          git commit -m 'docs: update keymap SVG [skip ci]' || echo "No changes to commit"
+          git push
+
+  pr_comment:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ github.actor }}
+
+      - name: Upload SVG
+        id: upload-svg
+        uses: McCzarny/upload-image@v2.0.1
+        with:
+          path: coaxial.svg
+          upload-method: cloudinary
+          api-key: ${{ secrets.CLOUDINARY_API_KEY }}
+          api-secret: ${{ secrets.CLOUDINARY_API_SECRET }}
+          cloud-name: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+
+      - name: Find Comment
+        uses: peter-evans/find-comment@v3
+        id: fc
+        with:
+          issue-number: ${{ github.event.number }}
+          body-includes: "New keymap layout preview"
+
+      - name: Create or update PR comment with SVG
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          edit-mode: replace
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          body: |
+            ## New keymap layout preview
+
+            ![Keymap SVG](${{ steps.upload-svg.outputs.url }})
 
   release:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       - name: Setup NodeJS
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
-          node-version: 'lts/*'
+          node-version: "lts/*"
+          cache: "npm"
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        run: npm i
+        run: npm ci
 
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ github.actor }}
 
