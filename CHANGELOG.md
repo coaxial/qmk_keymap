@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/coaxial/qmk_keymap/compare/v1.4.0...v1.5.0) (2025-11-02)
+
+
+### Features
+
+* Add right ctrl, right alt, printscr keys ([#37](https://github.com/coaxial/qmk_keymap/issues/37)) ([4a9333f](https://github.com/coaxial/qmk_keymap/commit/4a9333fb5d46bb67aaa632eb490e14508e3a44fd))
+
 # [1.4.0](https://github.com/coaxial/qmk_keymap/compare/v1.3.0...v1.4.0) (2023-11-30)
 
 
