@@ -9,25 +9,22 @@ jobs:
       matrix:
         file:
           - coaxial.json
+    env:
+      QMK_HOME: /home/runner/work/qmk_keymap/qmk_keymap/qmk_firmware
 
     steps:
-      - name: Cache dependencies
+      - name: Get QMK latest commit SHA
+        id: qmk-sha
+        run: echo "sha=$(curl -s https://api.github.com/repos/qmk/qmk_firmware/commits/master | jq -r .sha)" >> $GITHUB_OUTPUT
+
+      - name: Cache QMK firmware
         uses: actions/cache@v4
         with:
-          path: |
-            ~/.cache/pip
-            qmk_firmware
-          key: ${{ runner.os }}-deps-${{ hashFiles('**/requirements.txt', '**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-deps-
+          path: qmk_firmware
+          key: ${{ runner.os }}-qmk-${{ steps.qmk-sha.outputs.sha }}
+          restore-keys: ${{ runner.os }}-qmk-
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y git python3 python3-pip gcc-avr avr-libc binutils-avr jq
-          python3 -m pip install --upgrade pip qmk keymap-drawer
-
-      - name: Get QMK
+      - name: Get QMK firmware
         uses: actions/checkout@v5
         with:
           repository: qmk/qmk_firmware
@@ -36,14 +33,36 @@ jobs:
           fetch-depth: 1
           submodules: recursive
 
-      - name: Setup QMK
-        run: |
-          qmk setup -y
-
       - name: Checkout userspace
         uses: actions/checkout@v5
         with:
           path: qmk_firmware/users/${{ github.actor }}
+
+      - name: Cache apt packages
+        uses: actions/cache@v4
+        with:
+          path: /var/cache/apt/archives
+          key: ${{ runner.os }}-deps-${{ hashFiles('.github/workflows/build_release.yml') }}
+          restore-keys: ${{ runner.os }}-apt-
+
+      - name: Install dependencies
+        run: |
+          sudo rm /var/lib/man-db/auto-update
+          sudo apt-get install -y git gcc-avr avr-libc binutils-avr jq
+
+      - name: Setup python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.x"
+          cache: "pip"
+          cache-dependency-path: qmk_firmware/users/${{ github.actor }}/requirements.txt
+
+      - name: Install Python dependencies
+        run: pip install -r qmk_firmware/users/${{ github.actor }}/requirements.txt
+
+      - name: Setup QMK
+        run: |
+          qmk setup -y
 
       - name: Generate keymap SVG
         run: |
@@ -116,6 +135,7 @@ jobs:
       - name: Create or update PR comment with SVG
         uses: peter-evans/create-or-update-comment@v3
         with:
+          edit-mode: replace
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             ## New keymap layout preview
@@ -132,12 +152,14 @@ jobs:
           fetch-depth: 0
 
       - name: Setup NodeJS
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
           node-version: "lts/*"
+          cache: "npm"
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        run: npm i
+        run: npm ci
 
       - name: Download artifacts
         uses: actions/download-artifact@v4
