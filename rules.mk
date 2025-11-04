@@ -6,3 +6,4 @@ LED_UNDERGLOW_ENABLE = no # No LEDs on my keyboard
 MOUSEKEY_ENABLE = yes     # For the Mouse layer
 OLED_ENABLE = yes
 OLED_SELECT = core        # Use the standard driver for OLED
+OS_DETECTION_ENABLE = yes
