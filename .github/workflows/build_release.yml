@@ -22,7 +22,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: qmk_firmware
-          key: ${{ runner.os }}-qmk-${{ steps.qmk-sha.outputs.sha }}
+          key: ${{ runner.os }}-qmk-${{ steps.qmk-sha.outputs.sha }}-${{ github.actor }}
           restore-keys: ${{ runner.os }}-qmk-
 
       - name: Get QMK firmware
@@ -53,15 +53,14 @@ jobs:
         run: |
           sudo qmk_firmware/util/qmk_install.sh
 
-      - name: Debug!
-        run: ls -clash qmk_firmware/users/${{ github.actor }}/requirements.txt
-
       - name: Setup python
         uses: actions/setup-python@v6
         with:
           python-version: "3.x"
           cache: "pip"
-          cache-dependency-path: qmk_firmware/users/${{ github.actor }}/requirements.txt
+          cache-dependency-path: |
+            qmk_firmware/users/${{ github.actor }}/requirements.txt
+            qmk_firmware/users/dependabot[bot]/requirements.txt
 
       - name: Install Python dependencies
         run: pip install -r qmk_firmware/users/${{ github.actor }}/requirements.txt
