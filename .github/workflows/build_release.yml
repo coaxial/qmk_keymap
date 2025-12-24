@@ -85,9 +85,7 @@ jobs:
         with:
           name: ${{ github.actor }}
           path: |
-            *.hex
-            *.bin
-            *.uf2
+            qmk_firmware/*.hex
             coaxial.svg
           retention-days: 5
 
