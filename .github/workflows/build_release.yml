@@ -22,7 +22,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: qmk_firmware
-          key: ${{ runner.os }}-qmk-${{ steps.qmk-sha.outputs.sha }}
+          key: ${{ runner.os }}-qmk-${{ steps.qmk-sha.outputs.sha }}-${{ github.actor }}
           restore-keys: ${{ runner.os }}-qmk-
 
       - name: Get QMK firmware
@@ -53,15 +53,14 @@ jobs:
         run: |
           sudo qmk_firmware/util/qmk_install.sh
 
-      - name: Debug!
-        run: ls -clash qmk_firmware/users/${{ github.actor }}/requirements.txt
-
       - name: Setup python
         uses: actions/setup-python@v6
         with:
           python-version: "3.x"
           cache: "pip"
-          cache-dependency-path: qmk_firmware/users/${{ github.actor }}/requirements.txt
+          cache-dependency-path: |
+            qmk_firmware/users/${{ github.actor }}/requirements.txt
+            qmk_firmware/users/dependabot[bot]/requirements.txt
 
       - name: Install Python dependencies
         run: pip install -r qmk_firmware/users/${{ github.actor }}/requirements.txt
@@ -88,6 +87,7 @@ jobs:
 
       - name: Upload firmware and SVG
         uses: actions/upload-artifact@v4
+        if: github.actor != 'dependabot[bot]'
         with:
           name: ${{ github.actor }}
           path: |
@@ -98,7 +98,10 @@ jobs:
   commit_svg:
     needs: build
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: |
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/master' &&
+      github.actor != 'dependabot[bot]'
     steps:
       - name: Checkout repo
         uses: actions/checkout@v5
@@ -113,6 +116,7 @@ jobs:
           name: ${{ github.actor }}
 
       - name: Commit and push updated SVG
+        if: github.actor != 'dependabot[bot]'
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
@@ -123,7 +127,9 @@ jobs:
   pr_comment:
     needs: build
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: |
+      github.event_name == 'pull_request' &&
+      github.actor != 'dependabot[bot]'
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
@@ -159,7 +165,10 @@ jobs:
             ![Keymap SVG](${{ steps.upload-svg.outputs.url }})
 
   release:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: |
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/master' &&
+      github.actor != 'dependabot[bot]'
     needs: build
     runs-on: ubuntu-latest
     steps:
