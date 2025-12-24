@@ -43,7 +43,15 @@ jobs:
       # unnecessary
       - name: Configure apt
         run: |
-          sudo rm /var/lib/man-db/auto-update
+          echo 'path-exclude /usr/share/man/*' | sudo tee /etc/dpkg/dpkg.cfg.d/01_no_man
+          echo 'path-exclude /usr/share/groff/*' | sudo tee -a /etc/dpkg/dpkg.cfg.d/01_no_man
+          echo 'path-exclude /usr/share/info/*' | sudo tee -a /etc/dpkg/dpkg.cfg.d/01_no_man
+          echo 'path-exclude /usr/share/lintian/*' | sudo tee -a /etc/dpkg/dpkg.cfg.d/01_no_man
+          echo 'path-exclude /usr/share/locale/*' | sudo tee -a /etc/dpkg/dpkg.cfg.d/01_no_manauto-update
+
+      - name: Install dependencies
+        run: |
+          sudo qmk_firmware/util/qmk_install.sh
 
       - name: Setup python
         uses: actions/setup-python@v6
