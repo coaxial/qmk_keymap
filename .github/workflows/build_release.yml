@@ -98,7 +98,10 @@ jobs:
   commit_svg:
     needs: build
     runs-on: ubuntu-latest
-    if: github.event_name == "push" && github.ref == 'refs/heads/master' && github.actor != 'dependabot[bot]'
+    if: |
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/master' &&
+      github.actor != 'dependabot[bot]'
     steps:
       - name: Checkout repo
         uses: actions/checkout@v5
@@ -124,7 +127,9 @@ jobs:
   pr_comment:
     needs: build
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]'
+    if: |
+      github.event_name == 'pull_request' &&
+      github.actor != 'dependabot[bot]'
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
@@ -160,7 +165,10 @@ jobs:
             ![Keymap SVG](${{ steps.upload-svg.outputs.url }})
 
   release:
-    if: github.event_name == "push" && github.ref == 'refs/heads/master' && github.actor != 'dependabot[bot]'
+    if: |
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/master' &&
+      github.actor != 'dependabot[bot]'
     needs: build
     runs-on: ubuntu-latest
     steps:
