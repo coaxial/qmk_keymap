@@ -1,3 +1,11 @@
+# [1.6.0](https://github.com/coaxial/qmk_keymap/compare/v1.5.0...v1.6.0) (2025-12-24)
+
+
+### Features
+
+* Add media play/skip/prev, swap vol up/down side ([#42](https://github.com/coaxial/qmk_keymap/issues/42)) ([ffba40f](https://github.com/coaxial/qmk_keymap/commit/ffba40f0f7d6443796eed31c730f48eaba5e40e6))
+* Remove duplicate compose key ([#40](https://github.com/coaxial/qmk_keymap/issues/40)) ([14bbde0](https://github.com/coaxial/qmk_keymap/commit/14bbde09ecf0a80e5b6132c5c1abb90e63e45836))
+
 # [1.5.0](https://github.com/coaxial/qmk_keymap/compare/v1.4.0...v1.5.0) (2025-11-02)
 
 
