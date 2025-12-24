@@ -7,7 +7,7 @@
       "@semantic-release/github",
       {
         "assets": [
-          "qmk_firmware/*.hex",
+          "*.hex",
           "coaxial.svg"
         ]
       }

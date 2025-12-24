@@ -53,6 +53,9 @@ jobs:
         run: |
           sudo qmk_firmware/util/qmk_install.sh
 
+      - name: Debug!
+        run: ls -clash qmk_firmware/users/${{ github.actor }}/requirements.txt
+
       - name: Setup python
         uses: actions/setup-python@v6
         with:
@@ -80,12 +83,15 @@ jobs:
           qmk --version
           qmk compile "users/${{ github.actor }}/${{ matrix.file }}"
 
+      - name: Move firmware to root
+        run: mv qmk_firmware/*.hex .
+
       - name: Upload firmware and SVG
         uses: actions/upload-artifact@v4
         with:
           name: ${{ github.actor }}
           path: |
-            qmk_firmware/*.hex
+            *.hex
             coaxial.svg
           retention-days: 5
 
