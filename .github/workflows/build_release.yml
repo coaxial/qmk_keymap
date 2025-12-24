@@ -164,6 +164,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Avoids `[semantic-release] › ℹ  The local branch master is behind the
+      # remote one, therefore a new version won't be published.`
+      - name: Sync repo
+        run: |
+          git fetch origin master
+
       - name: Setup NodeJS
         uses: actions/setup-node@v6
         with:
