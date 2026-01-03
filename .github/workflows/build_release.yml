@@ -169,19 +169,16 @@ jobs:
       github.event_name == 'push' &&
       github.ref == 'refs/heads/master' &&
       github.actor != 'dependabot[bot]'
-    needs: build
+    # Needs all the commits to run correctly, including the SVG commit
+    needs:
+      - build
+      - commit_svg
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
-
-      # Avoids `[semantic-release] › ℹ  The local branch master is behind the
-      # remote one, therefore a new version won't be published.`
-      - name: Sync repo
-        run: |
-          git fetch origin master
 
       - name: Setup NodeJS
         uses: actions/setup-node@v6
