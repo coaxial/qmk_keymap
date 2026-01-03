@@ -181,7 +181,8 @@ jobs:
       # remote one, therefore a new version won't be published.`
       - name: Sync repo
         run: |
-          git fetch origin master
+          git fetch --prune origin
+          git reset --hard origin/master
 
       - name: Setup NodeJS
         uses: actions/setup-node@v6
