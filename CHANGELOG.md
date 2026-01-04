@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/coaxial/qmk_keymap/compare/v1.6.0...v1.7.0) (2026-01-04)
+
+
+### Features
+
+* Duplicate volume/media controls on other half ([#51](https://github.com/coaxial/qmk_keymap/issues/51)) ([776097b](https://github.com/coaxial/qmk_keymap/commit/776097be8901d5a9af09197f2f9172e7a311156b))
+
 # [1.6.0](https://github.com/coaxial/qmk_keymap/compare/v1.5.0...v1.6.0) (2025-12-24)
 
 
