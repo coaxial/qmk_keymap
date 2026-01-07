@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/coaxial/qmk_keymap/compare/v1.7.0...v1.7.1) (2026-01-07)
+
+
+### Bug Fixes
+
+* Handle dependabot workflow runs ([#56](https://github.com/coaxial/qmk_keymap/issues/56)) ([7a41089](https://github.com/coaxial/qmk_keymap/commit/7a41089d119dd31ca7cadd31d3dd4e3050a22cbc))
+
 # [1.7.0](https://github.com/coaxial/qmk_keymap/compare/v1.6.0...v1.7.0) (2026-01-04)
 
 
