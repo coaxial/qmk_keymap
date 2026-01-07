@@ -77,11 +77,12 @@ jobs:
           qmk setup -y
 
       - name: Generate keymap SVG
+        if: github.actor != 'dependabot[bot]'
         run: |
           cd qmk_firmware/users/${{ steps.set_var.outputs.username }}
           keymap -c drawer_config.yaml parse -q coaxial.json | keymap -c drawer_config.yaml draw - > coaxial.svg
           cd -
-          mv qmk_firmware/users/${{ github.actor }}/coaxial.svg .
+          mv qmk_firmware/users/${{ steps.set_var.outputs.username }}/coaxial.svg .
 
       - name: Build firmware
         run: |
@@ -94,8 +95,8 @@ jobs:
         run: mv qmk_firmware/*.hex .
 
       - name: Upload firmware and SVG
-        uses: actions/upload-artifact@v4
         if: github.actor != 'dependabot[bot]'
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ github.actor }}
           path: |
