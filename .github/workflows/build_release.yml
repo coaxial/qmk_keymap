@@ -70,7 +70,6 @@ jobs:
           cache-dependency-path: qmk_firmware/users/${{ steps.set_var.outputs.username }}/requirements.txt
 
       - name: Install Python dependencies
-        if: github.actor != 'dependabot[bot]'
         run: pip install -r qmk_firmware/users/${{ steps.set_var.outputs.username }}/requirements.txt
 
       - name: Setup QMK
