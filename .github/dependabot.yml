@@ -1,0 +1,40 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    rebase-strategy: "auto"
+    groups:
+      npm-dependencies:
+        patterns:
+          - "*" # Groups all npm updates into one PR
+        update-types:
+          - "minor"
+          - "patch"
+
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    rebase-strategy: "auto"
+    groups:
+      python-dependencies:
+        patterns:
+          - "*" # Groups all pip updates into one PR
+        update-types:
+          - "minor"
+          - "patch"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    rebase-strategy: "auto"
+    groups:
+      github-actions:
+        patterns:
+          - "*" # Groups all action updates into one PR
+        update-types:
+          - "minor"
+          - "patch"
