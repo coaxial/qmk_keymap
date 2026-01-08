@@ -1,6 +1,5 @@
 version: 2
 updates:
-  # NPM dependencies (from package.json)
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
@@ -9,12 +8,11 @@ updates:
     groups:
       npm-dependencies:
         patterns:
-          - "*"  # Groups all npm updates into one PR
+          - "*" # Groups all npm updates into one PR
         update-types:
           - "minor"
           - "patch"
 
-  # Python dependencies (from requirements.txt)
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
@@ -23,12 +21,11 @@ updates:
     groups:
       python-dependencies:
         patterns:
-          - "*"  # Groups all pip updates into one PR
+          - "*" # Groups all pip updates into one PR
         update-types:
           - "minor"
           - "patch"
 
-  # GitHub Actions (from .github/workflows/)
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -37,7 +34,7 @@ updates:
     groups:
       github-actions:
         patterns:
-          - "*"  # Groups all action updates into one PR
+          - "*" # Groups all action updates into one PR
         update-types:
           - "minor"
           - "patch"
