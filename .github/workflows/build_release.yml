@@ -96,7 +96,7 @@ jobs:
 
       - name: Upload firmware and SVG
         if: github.actor != 'dependabot[bot]'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ github.actor }}
           path: |
