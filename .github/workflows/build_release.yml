@@ -147,7 +147,7 @@ jobs:
 
       - name: Upload SVG
         id: upload-svg
-        uses: McCzarny/upload-image@v2.0.1
+        uses: McCzarny/upload-image@v2.0.3
         with:
           path: coaxial.svg
           upload-method: cloudinary
