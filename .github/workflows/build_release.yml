@@ -35,7 +35,7 @@ jobs:
           restore-keys: ${{ runner.os }}-qmk-
 
       - name: Get QMK firmware
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: qmk/qmk_firmware
           path: qmk_firmware
@@ -44,7 +44,7 @@ jobs:
           submodules: recursive
 
       - name: Checkout userspace
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           path: qmk_firmware/users/${{ steps.set_var.outputs.username }}
 
@@ -113,7 +113,7 @@ jobs:
       github.actor != 'dependabot[bot]'
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -185,7 +185,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
