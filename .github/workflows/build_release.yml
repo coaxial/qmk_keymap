@@ -28,7 +28,7 @@ jobs:
         run: echo "sha=$(curl -s https://api.github.com/repos/qmk/qmk_firmware/commits/master | jq -r .sha)" >> $GITHUB_OUTPUT
 
       - name: Cache QMK firmware
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: qmk_firmware
           key: ${{ runner.os }}-qmk-${{ steps.qmk-sha.outputs.sha }}-${{ steps.set_var.outputs.username }}
