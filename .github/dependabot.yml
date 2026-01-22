@@ -10,6 +10,7 @@ updates:
         patterns:
           - "*" # Groups all npm updates into one PR
         update-types:
+          - "major"
           - "minor"
           - "patch"
 
@@ -23,6 +24,7 @@ updates:
         patterns:
           - "*" # Groups all pip updates into one PR
         update-types:
+          - "major"
           - "minor"
           - "patch"
 
@@ -36,5 +38,6 @@ updates:
         patterns:
           - "*" # Groups all action updates into one PR
         update-types:
+          - "major"
           - "minor"
           - "patch"
