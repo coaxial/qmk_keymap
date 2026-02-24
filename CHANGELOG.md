@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/coaxial/qmk_keymap/compare/v1.7.1...v1.8.0) (2026-02-24)
+
+
+### Features
+
+* Remove F20 ([#82](https://github.com/coaxial/qmk_keymap/issues/82)) ([18a2d9f](https://github.com/coaxial/qmk_keymap/commit/18a2d9f59e70c8b96a1037f5c5ebe3d65327dc94))
+
 ## [1.7.1](https://github.com/coaxial/qmk_keymap/compare/v1.7.0...v1.7.1) (2026-01-07)
 
 
