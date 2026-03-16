@@ -120,7 +120,7 @@ jobs:
           ref: ${{ github.ref }}
 
       - name: Download artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: ${{ github.actor }}
 
@@ -141,7 +141,7 @@ jobs:
       github.actor != 'dependabot[bot]'
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: ${{ github.actor }}
 
@@ -200,7 +200,7 @@ jobs:
         run: npm ci
 
       - name: Download artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: ${{ github.actor }}
 
