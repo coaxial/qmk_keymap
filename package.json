@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/changelog": "^7.0.0",
     "@semantic-release/git": "github:semantic-release/git",
     "semantic-release": "^25.0.8"
   }
